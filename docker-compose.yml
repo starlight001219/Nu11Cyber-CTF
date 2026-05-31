@@ -1,0 +1,46 @@
+services:
+  backend:
+    build: ./backend
+    container_name: nu11cyber-backend
+    restart: unless-stopped
+    expose:
+      - "8000"
+    env_file:
+      - .env
+    environment:
+      - SECRET_KEY=${SECRET_KEY:?必须设置 SECRET_KEY}
+      - MASTER_KEY=${MASTER_KEY:?必须设置 MASTER_KEY}
+      - FLAG_KEY=${FLAG_KEY:?必须设置 FLAG_KEY}
+      - DATABASE_URL=sqlite+aiosqlite:///data/nu11cyber.db
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - backend_data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    container_name: nu11cyber-redis
+    restart: unless-stopped
+    expose:
+      - "6379"
+    volumes:
+      - redis_data:/data
+
+  nginx:
+    image: nginx:alpine
+    container_name: nu11cyber-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./frontend/dist:/usr/share/nginx/html:ro
+    depends_on:
+      - backend
+
+volumes:
+  backend_data:
+  redis_data:
