@@ -43,6 +43,10 @@ jobs:
     
     - name: Validate docker-compose.yml
       run: |
+        # Create .env file for docker compose validation
+        echo "SECRET_KEY=ci-dummy-secret-key-for-validation" > .env
+        echo "MASTER_KEY=ci-dummy-master-key-for-validation" >> .env
+        echo "FLAG_KEY=ci-dummy-flag-key-for-validation" >> .env
         docker compose config
       env:
         SECRET_KEY: ci-dummy-secret-key-for-validation
@@ -61,6 +65,10 @@ jobs:
     
     - name: Build Docker images
       run: |
+        # Create .env file for docker compose
+        echo "SECRET_KEY=ci-dummy-secret-key-for-validation" > .env
+        echo "MASTER_KEY=ci-dummy-master-key-for-validation" >> .env
+        echo "FLAG_KEY=ci-dummy-flag-key-for-validation" >> .env
         docker compose build
       env:
         SECRET_KEY: ci-dummy-secret-key-for-validation
