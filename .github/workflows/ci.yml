@@ -44,6 +44,10 @@ jobs:
     - name: Validate docker-compose.yml
       run: |
         docker compose config
+      env:
+        SECRET_KEY: ci-dummy-secret-key-for-validation
+        MASTER_KEY: ci-dummy-master-key-for-validation
+        FLAG_KEY: ci-dummy-flag-key-for-validation
 
   build:
     runs-on: ubuntu-latest
@@ -58,3 +62,7 @@ jobs:
     - name: Build Docker images
       run: |
         docker compose build
+      env:
+        SECRET_KEY: ci-dummy-secret-key-for-validation
+        MASTER_KEY: ci-dummy-master-key-for-validation
+        FLAG_KEY: ci-dummy-flag-key-for-validation
